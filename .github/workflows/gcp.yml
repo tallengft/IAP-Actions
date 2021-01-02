@@ -16,8 +16,8 @@ on: workflow_dispatch
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GKE_CLUSTER: cluster-1    # TODO: update to cluster name
-  GKE_ZONE: us-central1-c   # TODO: update to cluster zone
+  GKE_CLUSTER: private-gke    # TODO: update to cluster name
+  GKE_ZONE: us-central1   # TODO: update to cluster zone
   DEPLOYMENT_NAME: gke-test # TODO: update to deployment name
   IMAGE: test-image
 
@@ -41,12 +41,12 @@ jobs:
     - run: |-
         gcloud --quiet auth configure-docker
 
-    # # Get the GKE credentials so we can deploy to the cluster
-    # - uses: google-github-actions/get-gke-credentials@v0.2.1
-    #   with:
-    #     cluster_name: ${{ env.GKE_CLUSTER }}
-    #     location: ${{ env.GKE_ZONE }}
-    #     credentials: ${{ secrets.GKE_SA_KEY }}
+    # Get the GKE credentials so we can deploy to the cluster
+    - uses: google-github-actions/get-gke-credentials@v0.2.1
+      with:
+        cluster_name: ${{ env.GKE_CLUSTER }}
+        location: ${{ env.GKE_ZONE }}
+        credentials: ${{ secrets.GKE_SA_KEY }}
 
     # Build the Docker image
     - name: Build

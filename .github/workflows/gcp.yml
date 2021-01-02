@@ -76,7 +76,7 @@ jobs:
     # Load Service Account key to bastion from GitHub secret
     - name: Load Key
       run: |-
-        gcloud compute ssh --zone=us-central1-c ${{ env.BASTION_NAME }} -- 'echo "${{ secrets.GKE_SA_KEY }}" > sa.json'
+        gcloud compute ssh --zone=us-central1-c ${{ env.BASTION_NAME }} -- 'echo "${{ secrets.GKE_SA_KEY }}" | tee sa.json'
 
     # Activate Service Account using uploaded key
     - name: Activate Service Account

@@ -73,13 +73,13 @@ jobs:
       run: |-
         gcloud compute ssh --zone=us-central1-c ${{ env.BASTION_NAME }} -- 'date'
     
-    # Load service-account key to bastion
+    # Load Service Account key to bastion from GitHub secret
     - name: Load Key
       run: |-
-        gcloud compute ssh --zone=us-central1-c ${{ env.BASTION_NAME }} -- 'echo ${{ secrets.GKE_SA_KEY }} > sa.json'
+        gcloud compute ssh --zone=us-central1-c ${{ env.BASTION_NAME }} -- 'echo "${{ secrets.GKE_SA_KEY }}" > sa.json'
 
-    # Activate Service Account
-    - name: Load Key
+    # Activate Service Account using uploaded key
+    - name: Activate Service Account
       run: |-
         gcloud compute ssh --zone=us-central1-c ${{ env.BASTION_NAME }} -- 'gcloud auth activate-service-account ${{ env.SERVICE_ACCOUNT_NAME }}@${{ secrets.GKE_PROJECT }}.iam.gserviceaccount.com --key-file sa.json'
 

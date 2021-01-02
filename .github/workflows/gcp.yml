@@ -62,6 +62,12 @@ jobs:
       run: |-
         docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
 
+    # Test kubectl
+    - name: Cluster Info
+      run: |-
+        kubectl cluster-info
+
+
     # # Set up kustomize
     # - name: Set up Kustomize
     #   run: |-

@@ -5,11 +5,12 @@ resource "google_compute_network" "main" {
 }
 
 resource "google_compute_subnetwork" "main" {
-  project       = local.project
-  name          = "private-gke-main"
-  ip_cidr_range = "10.0.0.0/17"
-  region        = local.region
-  network       = google_compute_network.main.self_link
+  project                   = local.project
+  name                      = "private-gke-main"
+  ip_cidr_range             = "10.0.0.0/17"
+  region                    = local.region
+  network                   = google_compute_network.main.self_link
+  private_ip_google_access  = true
 
   secondary_ip_range {
     range_name    = "private-gke-pods"

@@ -12,14 +12,19 @@
 
 name: Build and Deploy to GKE
 
-on: workflow_dispatch
+on: 
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 env:
   PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GKE_CLUSTER: private-gke    # TODO: update to cluster name
-  GKE_ZONE: us-central1   # TODO: update to cluster zone
-  DEPLOYMENT_NAME: gke-test # TODO: update to deployment name
+  GKE_CLUSTER: private-gke
+  GKE_ZONE: us-central1
+  DEPLOYMENT_NAME: gke-test 
   IMAGE: test-image
+  BASTION_NAME: bastion-vm
 
 jobs:
   setup-build-publish-deploy:
@@ -62,11 +67,10 @@ jobs:
       run: |-
         docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
 
-    # Test kubectl
-    - name: Cluster Info
+    # Test IAP Connection by ssh to bastion and running fate
+    - name: Test IAP Connection
       run: |-
-        kubectl cluster-info
-
+        gcloud compute ssh --zone=us-central1-c ${{ env.BASTION_NAME }} -- 'date'
 
     # # Set up kustomize
     # - name: Set up Kustomize

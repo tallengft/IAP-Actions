@@ -21,30 +21,28 @@ module "bastion" {
   version        = "~> 2.0"
   network        = google_compute_network.main.self_link
   subnet         = google_compute_subnetwork.main.self_link
-  project        = var.project_id
-  host_project   = var.project_id
+  project        = local.project
+  host_project   = local.project
   name           = "hardened-gke-test-bastion"
-  zone           = local.bastion_zone
+  zone           = local.region
   image_project  = "debian-cloud"
   image_family   = "debian-9"
   machine_type   = "g1-small"
   startup_script = data.template_file.startup_script[0].rendered
-  members        = var.bastion_members
+  members        = [
+    "user:tyleruk2000@gmail.com",
+  ]
   shielded_vm    = "false"
   service_account_name = "hardened-gke-test-bastion"
   fw_name_allow_ssh_from_iap = "hardened-gke-test-bastion"
-
-  depends_on = [ 
-    google_project_service.gcp_apis
-   ]
 }
 
 module "bastion-nat" {
   count         = var.enable_bastion ? 1 : 0
   source        = "terraform-google-modules/cloud-nat/google"
   version       = "~> 1.2"
-  project_id    = var.project_id
-  region        = var.region
+  project_id    = local.project
+  region        = ocal.region
   router        = "hardened-gke-test-bastion-nat"
   network       = google_compute_network.main.self_link
   create_router = true

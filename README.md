@@ -69,10 +69,10 @@ terraform apply
 # Connect to bastion
 ```ssh
 gcloud config set project 
-gcloud compute ssh --zone=us-central1-c bastion-vm
+gcloud compute ssh --zone=us-central1-a bastion-vm
 ```
 
 # Run Remote commands
 ```ssh
-gcloud compute ssh --zone=us-central1-c bastion-vm -- 'date'
+gcloud compute ssh --zone=us-central1-a bastion-vm -- 'date'
 ```
